@@ -1,0 +1,5 @@
+#ignore all executable files
+*.exe
+
+#ignore config files
+.vscode/
