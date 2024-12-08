@@ -141,6 +141,21 @@ int BinarySearch(Array arr, int key)
     return -1;
 }
 
+int RBinarySearch(int a[], int l, int h, int key)
+{
+    if (l <= h)
+    {
+        int mid = (l + h) / 2;
+        if (a[mid] == key)
+            return mid;
+        else if (a[mid] > key)
+            return RBinarySearch(a, l, mid - 1, key);
+        else
+            return RBinarySearch(a, mid + 1, h, key);
+    }
+    return -1;
+}
+
 int main()
 {
     Array arr;
@@ -168,9 +183,11 @@ int main()
 
     printf("Linear search: %d\n", LinearSearch(arr, 30));
     printf("Binary search: %d\n", BinarySearch(arr, 30));
+    printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length - 1, 30));
 
     printf("Linear search: %d\n", LinearSearch(arr, 55));
     printf("Binary search: %d\n", BinarySearch(arr, 55));
+    printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length, 55));
 
     return 0;
 }
