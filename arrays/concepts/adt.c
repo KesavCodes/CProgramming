@@ -156,6 +156,68 @@ int RBinarySearch(int a[], int l, int h, int key)
     return -1;
 }
 
+int GetValue(Array arr, int index)
+{
+    if (index < 0 || index > arr.length - 1)
+    {
+
+        printf("Can't get value of element at index %d, the last index of the element is %d (index range can be between 0 and %d)\n", index, arr.length - 1, arr.length);
+        return -1;
+    }
+    return arr.A[index];
+}
+
+void SetValue(Array *arr, int index, int x)
+{
+    if (index < 0 || index > arr->length)
+    {
+        printf("Can't insert element at index %d, the last index of the element is %d (index range can be between 0 and %d)\n", index, arr->length - 1, arr->length);
+        return;
+    }
+    arr->A[index] = x;
+}
+
+int MaxValue(Array arr)
+{
+    if (arr.length == 0)
+        return -1;
+    int maxValue = arr.A[0];
+    int i = 1;
+    while (i < arr.length)
+    {
+        if (arr.A[i] > maxValue)
+            maxValue = arr.A[i];
+        i++;
+    }
+    return maxValue;
+}
+
+int MinValue(Array arr)
+{
+    if (arr.length == 0)
+        return -1;
+    int minValue = arr.A[0];
+    int i = 1;
+    while (i < arr.length)
+    {
+        if (arr.A[i] < minValue)
+            minValue = arr.A[i];
+        i++;
+    }
+    return minValue;
+}
+int SumOfArr(Array arr)
+{
+    int sum = 0;
+    for (int i = 0; i < arr.length; i++)
+        sum += arr.A[i];
+    return sum;
+}
+int AvgOfArr(Array arr)
+{
+    return SumOfArr(arr) / arr.length;
+}
+
 int main()
 {
     Array arr;
@@ -181,13 +243,13 @@ int main()
     // Insert(&arr, 6, 100);
     // Display(arr);
 
-    printf("Linear search: %d\n", LinearSearch(arr, 30));
-    printf("Binary search: %d\n", BinarySearch(arr, 30));
-    printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length - 1, 30));
+    // printf("Linear search: %d\n", LinearSearch(arr, 30));
+    // printf("Binary search: %d\n", BinarySearch(arr, 30));
+    // printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length - 1, 30));
 
-    printf("Linear search: %d\n", LinearSearch(arr, 55));
-    printf("Binary search: %d\n", BinarySearch(arr, 55));
-    printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length, 55));
+    // printf("Linear search: %d\n", LinearSearch(arr, 55));
+    // printf("Binary search: %d\n", BinarySearch(arr, 55));
+    // printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length, 55));
 
     return 0;
 }
