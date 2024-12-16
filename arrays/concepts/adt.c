@@ -213,9 +213,38 @@ int SumOfArr(Array arr)
         sum += arr.A[i];
     return sum;
 }
-int AvgOfArr(Array arr)
+float AvgOfArr(Array arr)
 {
-    return SumOfArr(arr) / arr.length;
+    return (float)SumOfArr(arr) / arr.length;
+}
+
+void Reverse(Array* arr){
+    int l = 0, r = arr->length - 1;
+    while(l<r){
+        int temp = arr->A[l];
+        arr->A[l] = arr->A[r];
+        arr->A[r] = temp;
+        l++;
+        r--;
+    }
+}
+
+void insertInSortedArray(Array* arr, int x){
+    if (arr->size == arr->length)
+    {
+        printf("The array is full, can't add element %d\n", x);
+        return;
+    }
+    int i = arr->length;
+    arr->A[i] = x;
+    while(arr->A[i] < arr->A[i-1] && i > 0){
+        int temp = arr->A[i];
+        arr->A[i] = arr->A[i-1];
+        arr->A[i-1] = temp;
+        i--;
+    }
+    arr->length+=1;
+    printf("The element %d is added to the array at index %d.\n", x, i);
 }
 
 int main()
@@ -236,6 +265,10 @@ int main()
     arr.length = n;
 
     Display(arr);
+    // Reverse(&arr);
+    insertInSortedArray(&arr, 25);
+    Display(arr);
+
     // Append(&arr, 50);
     // Insert(&arr, 8, 100);
     // Insert(&arr, 1, 100);
