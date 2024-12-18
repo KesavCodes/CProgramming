@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct
 {
@@ -218,9 +219,11 @@ float AvgOfArr(Array arr)
     return (float)SumOfArr(arr) / arr.length;
 }
 
-void Reverse(Array* arr){
+void Reverse(Array *arr)
+{
     int l = 0, r = arr->length - 1;
-    while(l<r){
+    while (l < r)
+    {
         int temp = arr->A[l];
         arr->A[l] = arr->A[r];
         arr->A[r] = temp;
@@ -229,7 +232,8 @@ void Reverse(Array* arr){
     }
 }
 
-void insertInSortedArray(Array* arr, int x){
+void InsertInSortedArray(Array *arr, int x)
+{
     if (arr->size == arr->length)
     {
         printf("The array is full, can't add element %d\n", x);
@@ -237,14 +241,38 @@ void insertInSortedArray(Array* arr, int x){
     }
     int i = arr->length;
     arr->A[i] = x;
-    while(arr->A[i] < arr->A[i-1] && i > 0){
+    while (arr->A[i] < arr->A[i - 1] && i > 0)
+    {
         int temp = arr->A[i];
-        arr->A[i] = arr->A[i-1];
-        arr->A[i-1] = temp;
+        arr->A[i] = arr->A[i - 1];
+        arr->A[i - 1] = temp;
         i--;
     }
-    arr->length+=1;
+    arr->length += 1;
     printf("The element %d is added to the array at index %d.\n", x, i);
+}
+
+bool IsSorted(Array arr)
+{
+    for (int i = 0; i < arr.length - 1; i++)
+    {
+        if (arr.A[i] > arr.A[i + 1])
+            return false;
+    }
+    return true;
+}
+
+void MoveNegativeToLeftSide(Array *arr){
+    int i=0, j=arr->length-1;
+    while(i<j){
+        while(arr->A[i]<0) i++;
+        while(arr->A[j]>=0) j--;
+        if(i<j) {
+            int temp = arr->A[i];
+            arr->A[i] = arr->A[j];
+            arr->A[j] = temp;
+        }
+    }
 }
 
 int main()
@@ -266,12 +294,15 @@ int main()
 
     Display(arr);
     // Reverse(&arr);
-    insertInSortedArray(&arr, 25);
-    Display(arr);
-
+    // printf("%s\n", IsSorted(arr) ? "true" : "false");
+    // InsertInSortedArray(&arr, 25);
+    // Display(arr);
+    MoveNegativeToLeftSide(&arr);
     // Append(&arr, 50);
     // Insert(&arr, 8, 100);
     // Insert(&arr, 1, 100);
+    Display(arr);
+    // printf("%s\n", IsSorted(arr) ? "true" : "false");
     // Delete(&arr, 0);
     // Insert(&arr, 6, 100);
     // Display(arr);
