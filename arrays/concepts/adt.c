@@ -262,17 +262,184 @@ bool IsSorted(Array arr)
     return true;
 }
 
-void MoveNegativeToLeftSide(Array *arr){
-    int i=0, j=arr->length-1;
-    while(i<j){
-        while(arr->A[i]<0) i++;
-        while(arr->A[j]>=0) j--;
-        if(i<j) {
+void MoveNegativeToLeftSide(Array *arr)
+{
+    int i = 0, j = arr->length - 1;
+    while (i < j)
+    {
+        while (arr->A[i] < 0)
+            i++;
+        while (arr->A[j] >= 0)
+            j--;
+        if (i < j)
+        {
             int temp = arr->A[i];
             arr->A[i] = arr->A[j];
             arr->A[j] = temp;
         }
     }
+}
+
+Array Merge(Array arr1, Array arr2)
+{
+    Array newArr;
+    newArr.size = arr1.size + arr2.size;
+    newArr.length = arr1.length + arr2.length;
+    int i = 0, j = 0, k = 0;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    while (i < arr1.length && j < arr2.length)
+    {
+        if (arr1.A[i] < arr2.A[j])
+            newArr.A[k++] = arr1.A[i++];
+        else
+            newArr.A[k++] = arr2.A[j++];
+    }
+    while (i < arr1.length)
+        newArr.A[k++] = arr1.A[i++];
+    while (j < arr2.length)
+        newArr.A[k++] = arr2.A[j++];
+    return newArr;
+}
+
+Array Union(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->size + arr2->size;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int i, j, k;
+    for (i = 0; i < arr1->length; i++)
+        newArr.A[i] = arr1->A[i];
+    for (j = 0; j < arr2->length; j++)
+    {
+        int isNew = true;
+        for (k = 0; k < arr1->length; k++)
+        {
+            if (arr2->A[j] == arr1->A[k])
+            {
+                isNew = false;
+                break;
+            }
+        }
+        if (isNew)
+            newArr.A[i++] = arr2->A[j];
+    }
+    newArr.length = i;
+    return newArr;
+}
+
+Array UnionForSortedArray(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->size + arr2->size;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int i = 0, j = 0, k = 0;
+    while (i < arr1->length && j < arr2->length)
+    {
+        if (arr1->A[i] == arr2->A[j])
+        {
+            newArr.A[k++] = arr1->A[i];
+            i++;
+            j++;
+        }
+        else if (arr1->A[i] < arr2->A[j])
+        {
+            newArr.A[k++] = arr1->A[i++];
+        }
+        else
+        {
+            newArr.A[k++] = arr2->A[j++];
+        }
+    }
+    while (i < arr1->length)
+        newArr.A[k++] = arr1->A[i++];
+    while (j < arr2->length)
+        newArr.A[k++] = arr2->A[j++];
+    newArr.length = k;
+    return newArr;
+}
+
+Array Intersection(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->length > arr2->length ? arr2->length : arr1->length;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int i = 0, k = 0;
+    for (; i < arr1->length; i++)
+    {
+        bool isIntersect = false;
+        bool isUnique = true;
+        for (int j = 0; j < arr2->length; j++)
+        {
+            if (arr1->A[i] == arr2->A[j])
+            {
+                isIntersect = true;
+                break;
+            }
+        }
+        if (!isIntersect)
+            continue;
+        for (int l = 0; l < k; l++)
+        {
+            if (arr1->A[i] == newArr.A[l])
+            {
+                isUnique = false;
+                break;
+            }
+        }
+        if (!isUnique)
+            continue;
+        newArr.A[k++] = arr1->A[i];
+    }
+    newArr.length = k;
+    return newArr;
+}
+
+Array IntersectionForSortedArray(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->length > arr2->length ? arr2->length : arr1->length;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int i = 0, j = 0, k = 0;
+    while (i < arr1->length && j < arr2->length)
+    {
+        if (arr1->A[i] == arr2->A[j])
+        {
+            newArr.A[k] = arr1->A[i];
+            i++;
+            j++;
+            k++;
+        }
+        else if (arr1->A[i] < arr2->A[j])
+            i++;
+        else
+            j++;
+    }
+    newArr.length = k;
+    return newArr;
+}
+
+Array Difference(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->size;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int k = 0;
+    for (int i = 0; i < arr1->length; i++)
+    {
+        bool isPresentInArr2 = false;
+        for (int j = 0; j < arr2->length; j++)
+        {
+            if (arr1->A[i] == arr2->A[j])
+            {
+                isPresentInArr2 = true;
+                break;
+            }
+        }
+        if (!isPresentInArr2)
+            newArr.A[k++] = arr1->A[i];
+    }
+    newArr.length = k;
+    return newArr;
 }
 
 int main()
@@ -293,10 +460,14 @@ int main()
     arr.length = n;
 
     Display(arr);
+    Array arr1 = {(int[]){1, 10, 18, 18, 30, 44}, 10, 5};
+    Array arr2 = {(int[]){8, 18, 30, 38}, 10, 4};
+    Array resArr = Intersection(&arr1, &arr2);
     // Reverse(&arr);
     // printf("%s\n", IsSorted(arr) ? "true" : "false");
     // InsertInSortedArray(&arr, 25);
-    // Display(arr);
+    Display(resArr);
+    printf("Length of the newArray: %d\n", resArr.length);
     MoveNegativeToLeftSide(&arr);
     // Append(&arr, 50);
     // Insert(&arr, 8, 100);
