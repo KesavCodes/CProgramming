@@ -337,7 +337,8 @@ Array UnionForSortedArray(Array *arr1, Array *arr2)
     {
         if (arr1->A[i] == arr2->A[j])
         {
-            newArr.A[k++] = arr1->A[i];
+            newArr.A[k] = arr1->A[i];
+            k++;
             i++;
             j++;
         }
@@ -442,49 +443,98 @@ Array Difference(Array *arr1, Array *arr2)
     return newArr;
 }
 
+Array DifferenceForSortedArray(Array *arr1, Array *arr2)
+{
+    Array newArr;
+    newArr.size = arr1->size;
+    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    int i = 0, j = 0, k = 0;
+    while (i < arr1->length && j < arr2->length)
+    {
+        if (arr1->A[i] == arr2->A[j])
+        {
+            while (arr1->A[i] == arr2->A[j])
+                i++;
+            j++;
+        }
+        else if (arr1->A[i] < arr2->A[j])
+        {
+            newArr.A[k++] = arr1->A[i++];
+        }
+        else
+            j++;
+    }
+    while (i < arr1->length)
+        newArr.A[k++] = arr1->A[i++];
+    newArr.length = k;
+    return newArr;
+}
+
+void PrintMenu()
+{
+    printf("MENU\n");
+    printf("1. Insert\n");
+    printf("2. Delete\n");
+    printf("3. Search\n");
+    printf("4. Sum\n");
+    printf("5. Display\n");
+    printf("6. Exit\n");
+}
+
 int main()
 {
     Array arr;
-    int n = 0;
+    int n = 0, ch, index, x;
     printf("Enter the size of the array: ");
     scanf("%d", &arr.size);
     arr.A = (int *)malloc(arr.size * sizeof(int));
-    arr.length = 0;
     printf("Enter the numbers of elements to be added: ");
-    scanf("%d", &n);
-    printf("Enter all elements : ");
-    for (int i = 0; i < n; i++)
+    scanf("%d", &arr.length);
+    printf("Enter all elements : \n");
+    for (int i = 0; i < arr.length; i++)
     {
         scanf("%d", &arr.A[i]);
     }
-    arr.length = n;
+    PrintMenu();
+    bool switchOn = true;
+    while (switchOn)
+    {
 
-    Display(arr);
-    Array arr1 = {(int[]){1, 10, 18, 18, 30, 44}, 10, 5};
-    Array arr2 = {(int[]){8, 18, 30, 38}, 10, 4};
-    Array resArr = Intersection(&arr1, &arr2);
-    // Reverse(&arr);
-    // printf("%s\n", IsSorted(arr) ? "true" : "false");
-    // InsertInSortedArray(&arr, 25);
-    Display(resArr);
-    printf("Length of the newArray: %d\n", resArr.length);
-    MoveNegativeToLeftSide(&arr);
-    // Append(&arr, 50);
-    // Insert(&arr, 8, 100);
-    // Insert(&arr, 1, 100);
-    Display(arr);
-    // printf("%s\n", IsSorted(arr) ? "true" : "false");
-    // Delete(&arr, 0);
-    // Insert(&arr, 6, 100);
-    // Display(arr);
-
-    // printf("Linear search: %d\n", LinearSearch(arr, 30));
-    // printf("Binary search: %d\n", BinarySearch(arr, 30));
-    // printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length - 1, 30));
-
-    // printf("Linear search: %d\n", LinearSearch(arr, 55));
-    // printf("Binary search: %d\n", BinarySearch(arr, 55));
-    // printf("Recursive Binary search: %d\n", RBinarySearch(arr.A, 0, arr.length, 55));
-
-    return 0;
+        printf("Enter your choice : ");
+        scanf("%d", &ch);
+        switch (ch)
+        {
+        case 1:
+            printf("Enter an Element: ");
+            scanf("%d", &x);
+            printf("Enter an Index: ");
+            scanf("%d", &index);
+            Insert(&arr, index, x);
+            continue;
+        case 2:
+            printf("Enter an Index: ");
+            scanf("%d", &index);
+            Delete(&arr, index);
+            continue;
+        case 3:
+            printf("Enter an Element: ");
+            scanf("%d", &x);
+            int searchRes = LinearSearch(arr, x);
+            printf(searchRes==-1?"Element not found\n":"Element available in index %d\n", searchRes);
+            continue;
+        case 4: 
+            int sumValue = SumOfArr(arr);
+            printf("Sum of all the element of an array : %d", sumValue);
+            continue;
+        case 5:
+            Display(arr);
+            continue;
+        case 6:
+            switchOn = false;
+            break;
+        default:
+            PrintMenu();
+        }
+        return 0;
+    }
 }
